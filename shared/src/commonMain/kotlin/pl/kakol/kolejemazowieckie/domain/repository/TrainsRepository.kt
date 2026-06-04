@@ -5,5 +5,10 @@ import pl.kakol.kolejemazowieckie.domain.model.Train
 
 interface TrainsRepository {
     fun getAllTrains(): Flow<List<Train>>
-    suspend fun toggleTrainCompletion(trainId: String)
+    suspend fun updateTrain(
+        id: String,
+        seen: Boolean? = null,
+        rode: Boolean? = null,
+        rating: Int? = null
+    )
 }

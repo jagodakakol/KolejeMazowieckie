@@ -10,7 +10,7 @@ import pl.kakol.kolejemazowieckie.data.dataSource.TrainsRemoteDataSource
 import pl.kakol.kolejemazowieckie.data.repository.TrainsRemoteRepository
 import pl.kakol.kolejemazowieckie.domain.model.Train
 import pl.kakol.kolejemazowieckie.domain.useCase.GetAllTrainsUseCase
-import pl.kakol.kolejemazowieckie.domain.useCase.ToggleTrainCompletionStateUseCase
+import pl.kakol.kolejemazowieckie.domain.useCase.UpdateTrainUseCase
 
 class TrainsListViewModel : ViewModel() {
 
@@ -20,7 +20,7 @@ class TrainsListViewModel : ViewModel() {
 
     private val repository = TrainsRemoteRepository()
     private val getAllTrainsUseCase = GetAllTrainsUseCase(repository)
-    private val toggleTrainCompletionStateUseCase = ToggleTrainCompletionStateUseCase(repository)
+    private val updateTrainUseCase = UpdateTrainUseCase(repository)
 
     val trains: StateFlow<List<Train>> =
         getAllTrainsUseCase()
@@ -32,13 +32,23 @@ class TrainsListViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            TrainsRemoteDataSource.refresh()
+            try {
+                TrainsRemoteDataSource.refresh()
+            } catch (e: Exception) {
+                // brak połączenia z serwerem
+            }
         }
     }
 
-    fun handleToggleCompletionButtonClick(trainId: String) {
-        viewModelScope.launch {
-            toggleTrainCompletionStateUseCase(trainId)
-        }
+    fun handleSeenChange(id: String, seen: Boolean) {
+        viewModelScope.launch { updateTrainUseCase(id, seen = seen) }
+    }
+
+    fun handleRodeChange(id: String, rode: Boolean) {
+        viewModelScope.launch { updateTrainUseCase(id, rode = rode) }
+    }
+
+    fun handleRatingChange(id: String, rating: Int) {
+        viewModelScope.launch { updateTrainUseCase(id, rating = rating) }
     }
 }

@@ -10,7 +10,7 @@ class TrainsRemoteRepository : TrainsRepository {
     override fun getAllTrains(): Flow<List<Train>> =
         TrainsRemoteDataSource.trains
 
-    override suspend fun toggleTrainCompletion(trainId: String) {
-        TrainsRemoteDataSource.toggleTrainCompletion(trainId)
+    override suspend fun updateTrain(id: String, seen: Boolean?, rode: Boolean?, rating: Int?) {
+        TrainsRemoteDataSource.updateTrain(id, seen, rode, rating)
     }
 }

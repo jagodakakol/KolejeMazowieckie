@@ -6,8 +6,9 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import pl.kakol.kolejemazowieckie.getPlatform
 
-const val HOST = "localhost"
+val HOST = if (getPlatform().name.contains("Android")) "10.0.2.2" else "localhost"
 const val PORT = 8080
 
 object HttpClientProvider {

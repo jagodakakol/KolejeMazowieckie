@@ -16,7 +16,9 @@ class TrainRepositoryImpl : TrainRepository {
         id = this[TrainsTable.id],
         name = this[TrainsTable.name],
         infoUrl = this[TrainsTable.infoUrl],
-        completed = this[TrainsTable.completed]
+        seen = this[TrainsTable.seen],
+        rode = this[TrainsTable.rode],
+        rating = this[TrainsTable.rating]
     )
 
     override fun getAll(): List<Train> = transaction {
@@ -35,16 +37,27 @@ class TrainRepositoryImpl : TrainRepository {
                 it[id] = train.id
                 it[name] = train.name
                 it[infoUrl] = train.infoUrl
-                it[completed] = train.completed
+                it[seen] = train.seen
+                it[rode] = train.rode
+                it[rating] = train.rating
             }
         }
     }
 
-    override fun update(id: String, newName: String?, newInfoUrl: String?, newCompleted: Boolean?): Boolean = transaction {
+    override fun update(
+        id: String,
+        newName: String?,
+        newInfoUrl: String?,
+        newSeen: Boolean?,
+        newRode: Boolean?,
+        newRating: Int?
+    ): Boolean = transaction {
         val rows = TrainsTable.update({ TrainsTable.id eq id }) { st ->
             if (newName != null) st[TrainsTable.name] = newName
             if (newInfoUrl != null) st[TrainsTable.infoUrl] = newInfoUrl
-            if (newCompleted != null) st[TrainsTable.completed] = newCompleted
+            if (newSeen != null) st[TrainsTable.seen] = newSeen
+            if (newRode != null) st[TrainsTable.rode] = newRode
+            if (newRating != null) st[TrainsTable.rating] = newRating
         }
         rows > 0
     }

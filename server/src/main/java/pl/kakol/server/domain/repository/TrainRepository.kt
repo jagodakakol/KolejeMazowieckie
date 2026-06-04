@@ -6,6 +6,13 @@ interface TrainRepository {
     fun getAll(): List<Train>
     fun getById(id: String): Train?
     fun add(train: Train)
-    fun update(id: String, newName: String?, newInfoUrl: String?, newCompleted: Boolean?): Boolean
+    fun update(
+        id: String,
+        newName: String?,
+        newInfoUrl: String?,
+        newSeen: Boolean?,
+        newRode: Boolean?,
+        newRating: Int?
+    ): Boolean
     fun delete(id: String): Boolean
 }

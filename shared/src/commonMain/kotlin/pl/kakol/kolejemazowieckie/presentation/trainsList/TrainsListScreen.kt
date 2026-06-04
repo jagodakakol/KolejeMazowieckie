@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import pl.kakol.kolejemazowieckie.presentation.theme.Dimens
 
 @Composable
 fun TrainsListScreen(
@@ -19,18 +18,18 @@ fun TrainsListScreen(
     val trainsState = viewModel.trains.collectAsState()
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = Dimens.TrainBoxWidth),
+        columns = GridCells.Adaptive(minSize = 320.dp),
         modifier = modifier,
-        contentPadding = PaddingValues(Dimens.PaddingMedium),
-        horizontalArrangement = Arrangement.spacedBy(Dimens.PaddingMedium),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        contentPadding = PaddingValues(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(trainsState.value) { train ->
             TrainItem(
                 train = train,
-                onToggleCompletionButtonClick = {
-                    viewModel.handleToggleCompletionButtonClick(it.id)
-                }
+                onSeenChange = { viewModel.handleSeenChange(train.id, it) },
+                onRodeChange = { viewModel.handleRodeChange(train.id, it) },
+                onRatingChange = { viewModel.handleRatingChange(train.id, it) }
             )
         }
     }

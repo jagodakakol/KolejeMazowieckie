@@ -6,5 +6,7 @@ import kotlinx.serialization.Serializable
 data class TrainUpdateRequest(
     val name: String? = null,
     val infoUrl: String? = null,
-    val completed: Boolean? = null
+    val seen: Boolean? = null,
+    val rode: Boolean? = null,
+    val rating: Int? = null
 )

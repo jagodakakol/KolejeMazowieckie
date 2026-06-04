@@ -48,7 +48,14 @@ fun Route.trainRoutes(repository: TrainRepository) {
         val id = call.parameters["id"]
             ?: return@patch call.respond(HttpStatusCode.BadRequest, "Brak id")
         val request = call.receive<TrainUpdateRequest>()
-        val updated = repository.update(id, request.name, request.infoUrl, request.completed)
+        val updated = repository.update(
+            id = id,
+            newName = request.name,
+            newInfoUrl = request.infoUrl,
+            newSeen = request.seen,
+            newRode = request.rode,
+            newRating = request.rating
+        )
         if (updated) {
             call.respond(HttpStatusCode.NoContent)
         } else {
