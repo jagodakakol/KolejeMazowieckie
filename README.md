@@ -1,41 +1,50 @@
-This is a Kotlin Multiplatform project targeting Android, Web, Desktop (JVM).
+# Koleje Mazowieckie 🚆
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Aplikacja multiplatformowa (Kotlin Multiplatform + Compose Multiplatform) prezentująca tabor
+Kolei Mazowieckich — elektryczne zespoły trakcyjne, lokomotywy i wagony piętrowe.
+Użytkownik może przeglądać pojazdy, otwierać linki z informacjami oraz odhaczać te,
+które już widział / którymi jechał.
 
-### Running the apps
+Projekt zaliczeniowy z przedmiotu **Technologie internetowe**. Autor: **Jagoda Kąkol**.
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## ✨ Funkcje
+- Lista taboru KM ze zdjęciami (EN57AKM, EN71, EN76 Elf, ER75 FLIRT, ER160 FLIRT3, 45WE, EU47 Hetman, wagony piętrowe Twindexx).
+- Przycisk **Info** otwierający stronę z informacjami o pojeździe.
+- Odhaczanie pojazdów (checkbox).
+- Działa na **Androidzie, Desktopie i w przeglądarce** (wspólny kod UI).
+- Dane pobierane z własnego **serwera HTTP** połączonego z **bazą danych**.
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
-- Web app:
-  - Wasm target (faster, modern browsers): `./gradlew :webApp:wasmJsBrowserDevelopmentRun`
-  - JS target (slower, supports older browsers): `./gradlew :webApp:jsBrowserDevelopmentRun`
+## 🧱 Architektura
+Aplikacja kliencka (`shared`): Clean Architecture + MVVM — warstwy `domain` (model, repozytorium, use case'y), `data` (źródła danych, repozytoria), `presentation` (ViewModel, widoki Compose).
 
-### Running tests
+Serwer (`server`): warstwy `domain` (model, interfejs repozytorium), `infrastructure` (baza danych Exposed, implementacja repozytorium), `application` (DTO, routes) oraz `Server.kt` (start, pluginy, obsługa błędów, Dependency Injection).
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+## 🛠️ Technologie
+Compose Multiplatform, Material 3, MVVM, Dependency Injection, Ktor (Client + Server/Netty), kotlinx.serialization, StatusPages, Exposed, baza H2, Kotlin Multiplatform.
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- Desktop tests: `./gradlew :shared:jvmTest`
-- Web tests:
-  - Wasm target: `./gradlew :shared:wasmJsTest`
-  - JS target: `./gradlew :shared:jsTest`
+## ▶️ Uruchomienie
+**Serwer** (musi działać, by aplikacja pobrała dane):
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+.\gradlew :server:run
+```
+Serwer: http://localhost:8080 (test: http://localhost:8080/trains).
 
----
+**Aplikacja:**
+- Desktop: uruchom `main()` w `desktopApp/.../main.kt`.
+- Web: konfiguracja `webApp [wasmJs]`.
+- Android: moduł `androidApp` na emulatorze/urządzeniu.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## 🌐 API (REST)
+| Metoda | Ścieżka | Opis | Kody |
+|--------|---------|------|------|
+| GET | `/trains` | Lista pojazdów | 200 |
+| GET | `/trains/{id}` | Szczegóły pojazdu | 200 / 404 |
+| POST | `/trains` | Dodanie pojazdu | 201 / 400 / 422 |
+| PATCH | `/trains/{id}` | Aktualizacja | 204 / 404 |
+| DELETE | `/trains/{id}` | Usunięcie | 200 / 404 |
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+Obsługa błędów (StatusPages): 400 (zły JSON), 422 (walidacja), 404 (brak zasobu), 500 (błąd serwera).
+
+## 🧪 Testowanie
+API testowane w **Postmanie** (wszystkie metody + przypadki błędów).
