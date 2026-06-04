@@ -1,4 +1,4 @@
-package pl.kakol.server.model
+package pl.kakol.server.application.dto
 
 import kotlinx.serialization.Serializable
 

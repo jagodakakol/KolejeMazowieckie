@@ -1,4 +1,4 @@
-package pl.kakol.server.database
+package pl.kakol.server.infrastructure.database
 
 import org.jetbrains.exposed.sql.Table
 

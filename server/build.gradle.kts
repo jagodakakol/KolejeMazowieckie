@@ -25,6 +25,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:0.53.0")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.53.0")
     implementation("com.h2database:h2:2.2.224")
+    implementation("io.ktor:ktor-server-di-jvm:3.4.1")
 }
 
 application {
